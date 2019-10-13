@@ -1,0 +1,34 @@
+# EconJobMarket.jl
+
+This is an interface for the EconJobMarket [API](https://backend.econjobmarket.org/) using the Julia programing language.
+
+## Introduction
+
+The Econjobmarket Data API provides the following endpoints,
+
+- Job Opening Advertisements information (public)
+- Application Method (recruiter-only access)
+- Applicants Method (recruiter-only access)
+- Files Method (recruiter-only access)
+- Recommendation Letters (recruiter-only access)
+- Document Method (recruiter-only access)
+
+Currently, only the job opening advertisements is implemented.
+
+Waiting for access to a recruiter account to implemented the recruiter-only access methods.
+
+## Getting Started
+
+Install the project either though
+
+```
+]add https://github.com/Nosferican/EconJobMarket.jl # Use ] to access the Pkg REPL
+```
+
+or
+```
+using Pkg
+Pkg.add(PackageSpec(url = "https://github.com/Nosferican/EconJobMarket.jl"))
+```
+
+See the next section for functionality.

@@ -1,0 +1,15 @@
+# API
+
+## Public
+
+```@docs
+EconJobMarket
+fetch_ads
+```
+
+## Private
+
+```@autodocs
+Modules = [EconJobMarket]
+Private = true
+```

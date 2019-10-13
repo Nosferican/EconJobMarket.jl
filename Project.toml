@@ -1,0 +1,22 @@
+name = "EconJobMarket"
+uuid = "06c3203b-997f-43f4-b568-00aa318f11a0"
+authors = ["José Bayoán Santiago Calderón <naoyabpr@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+Cascadia = "54eefc05-d75b-58de-a785-1a3403f0919f"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+
+[compat]
+Documenter = "0.23"
+
+[extras]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Weave = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
+
+[targets]
+test = ["Test", "Documenter", "Weave"]
