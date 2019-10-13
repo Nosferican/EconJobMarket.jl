@@ -11,5 +11,5 @@
 - Similar functionality for Python
   - [korenmiklos/econjobmarket-applications](https://github.com/korenmiklos/econjobmarket-applications)
   - [Victoria Marone / Pull_EJM_listings.py](https://www.dropbox.com/s/e8mi47jnst07c4e/Pull_EJM_listings.py?dl=0)
-- Similar functionality for R:
+- Similar functionality for R
   - [tyleransom/econJobMarket](https://github.com/tyleransom/econJobMarket)
