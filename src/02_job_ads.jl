@@ -1,11 +1,11 @@
 """
     OPENINGS_URL::String
-URL for accessing the public data for job opening advertisements in JSON format from EconJobMarket.
+[URL](https://backend.econjobmarket.org/data/zz_public/json/Ads) for accessing the public data for job opening advertisements in JSON format from EconJobMarket.
 """
 const OPENINGS_URL = "https://backend.econjobmarket.org/data/zz_public/json/Ads"
 """
     CATEGORIES_URL::String
-URL for accessing the public data for job opening categories in JSON format from EconJobMarket.
+[URL](https://backend.econjobmarket.org/data/zz_public/json/Categories) for accessing the public data for job opening categories in JSON format from EconJobMarket.
 """
 const CATEGORIES_URL = "https://backend.econjobmarket.org/data/zz_public/json/Categories"
 """
@@ -19,17 +19,33 @@ const CATEGORIES = JSON3.read(read(joinpath(dirname(@__DIR__), "data", "Categori
 Given a string, it provides indicators for whether the job ad listed each opening category.
 
 # Example
-```julia-repl
+```jldoctest
 julia> EconJobMarket.categories_indicator("2,3")
+34-element BitArray{1}:
+ 0
+ 1
+ 1
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ ⋮
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
 ```
 """
-function categories_indicator(obj::AbstractString)
-    output = BitVector(undef, 34)
-    for elem in eachmatch(r"\d+", obj)
-        output[parse(Int, elem.match)] = true
-    end
-    output
-end
+categories_indicator(obj::AbstractString) =
+    1:34 .∈ Ref([ parse(Int, elem.match) for elem ∈ eachmatch(r"\d+", obj) ])
 """
     parse_opening(node)::NamedTuple
 For each opening, it parses the information.
@@ -42,8 +58,8 @@ function parse_opening(node)
     position_type = isnothing(node.position_type) ? missing : node.position_type
     adtext =
         reduce((x, y) -> "$x $y",
-               nodeText(node) for node in eachmatch(Selector("body"),
-                                                    parsehtml(node.adtitle).root))
+               nodeText(node) for node ∈ eachmatch(Selector("body"),
+                                                   parsehtml(node.adtitle).root))
     startdate = isnothing(node.startdate) ? missing : Date(node.startdate)
     enddate = isnothing(node.enddate) ? missing : Date(node.enddate)
     country_code = isnothing(node.country_code) ? missing : node.country_code
@@ -55,7 +71,7 @@ function parse_opening(node)
     latitude = isnothing(node.latitude) ? missing : parse(Float64, node.latitude)
     name = isnothing(node.name) ? missing : node.shortname
     cats = isnothing(node.categories) ? missing : categories_indicator(node.categories)
-    (; zip(Tuple(Symbol(clean_name(elem)) for elem in propertynames(node)
+    (; zip(Tuple(Symbol(clean_name(elem)) for elem ∈ propertynames(node)
                  if clean_name(elem) ≠ "categories"),
            (posid, oid, adtitle, position_type_id, position_type,
             adtext, startdate, enddate, country_code, position_country,
@@ -68,9 +84,29 @@ Writes a text file with the latest job opening advertisements from EJM.
 
 # Example
 ```jldoctest
-julia> fetch_ads("ads.tsv")
-"ads.tsv"
-julia> data = CSV.read("ads.tsv");
+julia> data = joinpath(dirname(@__DIR__), "data", "ads.tsv") |>
+       fetch_ads |>
+       CSV.read;
+
+julia> Tables.schema(data)
+Tables.Schema:
+ :posid             Int64
+ :oid               Int64
+ :adtitle           String
+ :position_type_id  Int64
+ :position_type     String
+ :adtext            String
+ :categories        Date
+ :startdate         Date
+ :enddate           Union{Missing, String}
+ :country_code      Union{Missing, String}
+ :position_country  String
+ :department        String
+ :shortname         Union{Missing, String}
+ :address           Union{Missing, Float64}
+ :longitude         Union{Missing, Float64}
+ :latitude          String
+ :name              Bool
 ```
 """
 fetch_ads(filepath::AbstractString; delim::Union{Char,AbstractString} = '\t') =

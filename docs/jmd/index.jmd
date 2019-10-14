@@ -19,16 +19,17 @@ Waiting for access to a recruiter account to implemented the recruiter-only acce
 
 ## Getting Started
 
-Install the project either though
+Install the package either though
 
 ```
-]add https://github.com/Nosferican/EconJobMarket.jl # Use ] to access the Pkg REPL
+]add EconJobMarket # Use ] to access the Pkg REPL
 ```
 
 or
+
 ```
 using Pkg
-Pkg.add(PackageSpec(url = "https://github.com/Nosferican/EconJobMarket.jl"))
+Pkg.add("EconJobMarket")
 ```
 
-See the next section for functionality.
+See the next section for the functionality.

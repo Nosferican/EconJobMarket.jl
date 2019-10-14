@@ -1,14 +1,17 @@
 using Documenter, Weave, EconJobMarket
+const DOCSPATH = realpath(joinpath(dirname(pathof(EconJobMarket)), "..", "docs"))
+joinpath(DOCSPATH, "src") |>
+    (dir -> isdir(dir) || mkdir(dir))
+foreach(rm, joinpath(DOCSPATH, "src", file) for file ∈ readdir(joinpath(DOCSPATH, "src")))
+foreach(filepath -> weave(joinpath(DOCSPATH, "jmd", filepath),
+                          out_path = joinpath(DOCSPATH, "src"),
+                          doctype = "github"),
+        readdir(joinpath(DOCSPATH, "jmd")))
 DocMeta.setdocmeta!(EconJobMarket, :DocTestSetup, :(using EconJobMarket), recursive = true)
-for file ∈ readdir(joinpath(dirname(pathof(EconJobMarket)), "..", "docs", "jmd"))
-    weave(joinpath(dirname(pathof(EconJobMarket)), "..", "docs", "jmd", file),
-          out_path = joinpath(dirname(pathof(EconJobMarket)), "..", "docs", "src"),
-          doctype = "github")
-end
-makedocs(format = Documenter.HTML(),
+makedocs(root = DOCSPATH,
+         format = Documenter.HTML(),
          modules = [EconJobMarket],
          sitename = "EconJobMarket.jl",
          pages = ["Introduction" => "index.md",
-                  "API" => "api.md"]
-    )
+                  "API" => "api.md"])
 deploydocs(repo = "github.com/Nosferican/EconJobMarket.jl.git")

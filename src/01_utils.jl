@@ -8,5 +8,5 @@ julia> EconJobMarket.clean_name(Symbol("3This  is a Cat:egory!4cΩ"))
 ```
 """
 clean_name(obj)::Symbol =
-    join(isascii(x) ? lowercase(x) : x for x in string(obj)) |>
+    join(isascii(elem) ? lowercase(elem) : elem for elem ∈ string(obj)) |>
     normalizename

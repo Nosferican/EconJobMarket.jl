@@ -9,8 +9,12 @@ module EconJobMarket
     using HTTP: HTTP
     using JSON3: JSON3
 
-    include("utils.jl")
-    include("job_ads.jl")
+    foreach(include,
+            [ filename for filename ∈ readdir(@__DIR__)
+              if occursin(r"^\d+.*\.jl$", filename) ] |>
+            sort!)
+
     export CSV, Tables,
+           Date,
            fetch_ads
 end
