@@ -9,11 +9,48 @@ const OPENINGS_URL = "https://backend.econjobmarket.org/data/zz_public/json/Ads"
 """
 const CATEGORIES_URL = "https://backend.econjobmarket.org/data/zz_public/json/Categories"
 """
-    CATEGORIES::Vector{Symbol}
+    CATEGORIES::Vector{String}
 Job opening advertisements categories.
+```jldoctest
+julia> EconJobMarket.CATEGORIES
+34-element Array{String,1}:
+ "Development; Growth"
+ "Econometrics"
+ "Economic History"
+ "Environmental; Ag. Econ."
+ "Experimental Economics"
+ "Finance"
+ "Industrial Organization"
+ "International Finance/Macro"
+ "International Trade"
+ "Labor; Demographic Economics"
+ "Law and Economics"
+ "Macroeconomics; Monetary"
+ "Microeconomics"
+ "Public Economics"
+ "Theory"
+ "Behavioral Economics"
+ ⋮
+ "Urban; Rural; Regional Economics"
+ "Health; Education; Welfare"
+ "Business Economics"
+ "Computational Economics"
+ "Political Economy"
+ "Accounting"
+ "Decision Sciences"
+ "Insurance"
+ "Management, General"
+ "Management, Health Care"
+ "Management, Information Technology"
+ "Marketing"
+ "Operations Research"
+ "Organizational Behavior"
+ "Real Estate"
+ "Statistics"
+```
 """
 const CATEGORIES = JSON3.read(read(joinpath(dirname(@__DIR__), "data", "Categories.json"))) |>
-    (obj -> Symbol.(getproperty.(obj, :name)))
+    (obj -> getproperty.(obj, :name))
 """
     categories_indicator(obj::AbstractString)::BitVector
 Given a string, it provides indicators for whether the job ad listed each opening category.
@@ -71,8 +108,9 @@ function parse_opening(node)
     latitude = isnothing(node.latitude) ? missing : parse(Float64, node.latitude)
     name = isnothing(node.name) ? missing : node.shortname
     cats = isnothing(node.categories) ? missing : categories_indicator(node.categories)
-    (; zip(Tuple(Symbol(clean_name(elem)) for elem ∈ propertynames(node)
-                 if clean_name(elem) ≠ "categories"),
+    (; zip(Tuple(append!([ Symbol(clean_name(elem)) for elem ∈ propertynames(node)
+                           if clean_name(elem) ≠ :categories ],
+                           clean_name.(CATEGORIES))),
            (posid, oid, adtitle, position_type_id, position_type,
             adtext, startdate, enddate, country_code, position_country,
             department, shortname, address, longitude, latitude, name,
@@ -90,23 +128,36 @@ julia> data = joinpath(dirname(@__DIR__), "data", "ads.tsv") |>
 
 julia> Tables.schema(data)
 Tables.Schema:
- :posid             Int64
- :oid               Int64
- :adtitle           String
- :position_type_id  Int64
- :position_type     String
- :adtext            String
- :categories        Date
- :startdate         Date
- :enddate           Union{Missing, String}
- :country_code      Union{Missing, String}
- :position_country  String
- :department        String
- :shortname         Union{Missing, String}
- :address           Union{Missing, Float64}
- :longitude         Union{Missing, Float64}
- :latitude          String
- :name              Bool
+ :posid                              Int64
+ :oid                                Int64
+ :adtitle                            String
+ :position_type_id                   String
+ :position_type                      String
+ :adtext                             String
+ :startdate                          Date
+ :enddate                            Date
+ :country_code                       String
+ :position_country                   String
+ :department                         String
+ :shortname                          String
+ :address                            Missing
+ :longitude                          Float64
+ :latitude                           Float64
+ ⋮
+ :business_economics                 Bool
+ :computational_economics            Bool
+ :political_economy                  Bool
+ :accounting                         Bool
+ :decision_sciences                  Bool
+ :insurance                          Bool
+ :management_general                 Bool
+ :management_health_care             Bool
+ :management_information_technology  Bool
+ :marketing                          Bool
+ :operations_research                Bool
+ :organizational_behavior            Bool
+ :real_estate                        Bool
+ :statistics                         Bool
 ```
 """
 fetch_ads(filepath::AbstractString; delim::Union{Char,AbstractString} = '\t') =
