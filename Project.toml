@@ -11,7 +11,13 @@ HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 
 [compat]
+CSV = "0.5"
+Cascadia = "0.4"
 Documenter = "0.23"
+HTTP = "0.8"
+JSON3 = "0.1"
+Weave = "0.9"
+julia = "1"
 
 [extras]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
