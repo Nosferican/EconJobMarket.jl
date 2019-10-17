@@ -4,7 +4,7 @@
 
 ### User
 
-Using the software is a great way to contribute. Asking questions on the Julia Slack channel, Discourse, or on the GitHub repository is a great way to improve the documentation, identify bugs, request enhancements (e.g., feature requests), and let others know about the software. For example, users could bringing a new model/estimator or algorithm to my attention which could potentially be implemented.
+Using the software is a great way to contribute. Asking questions on the Julia Slack channel, Discourse, or on the GitHub repository is a great way to improve the documentation, identify bugs, request enhancements (e.g., feature requests), and let others know about the software.
 
 ### Contributor
 
