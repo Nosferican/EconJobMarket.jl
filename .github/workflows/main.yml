@@ -7,17 +7,27 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        julia-version: [1.3.0-rc3]
-        julia-arch: [x64]
-        os: [ubuntu-latest]
+        julia-version: [1.0.5, 1.2.0, 1.3.0-rc4]
+        julia-arch: [x64, x86]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        exclude:
+          - os: macOS-latest
+            julia-arch: x86
     steps:
-      - uses: actions/checkout@v1.0.0
+      - uses: actions/checkout@v1
       - uses: julia-actions/setup-julia@latest
         with:
           version: ${{ matrix.julia-version }}
-      - uses: julia-actions/julia-buildpkg@master
-      - uses: julia-actions/julia-runtest@master
-      - uses: julia-actions/julia-uploadcodecov@master
+      - name: Build
+        uses: julia-actions/julia-buildpkg@master
+      - name: Tests
+        uses: julia-actions/julia-runtest@master
+      - name: Coverage
+        uses: julia-actions/julia-uploadcodecov@master
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Documentation
+        if: ({{ matrix.julia-version }} == 1.3.0-rc4) && ({{ matrix.os }} == ubuntu-latest)
+        run:  julia --project=docs --color=yes docs/make.jl
         env:
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
