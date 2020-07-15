@@ -15,7 +15,7 @@ CSV = "0.5"
 Cascadia = "0.4"
 Documenter = "0.23"
 HTTP = "0.8"
-JSON3 = "0.1"
+JSON3 = "0.1, 1.1"
 Weave = "0.9"
 julia = "1"
 
